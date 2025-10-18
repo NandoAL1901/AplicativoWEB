@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LSP - Reconocimiento de LSP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">LSP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link active" href="learn.html">Reconocimiento</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-5">
+    <h1 class="mb-4 text-primary">Reconocimiento de Señas y Módulo Educativo</h1>
+
+    <div class="text-center mb-3">
+        <video id="camera" width="100%" style="max-width:640px;" autoplay muted></video>
+    </div>
+
+    <div class="text-center mb-4">
+        <button id="toggleCamera" class="btn btn-primary">Apagar cámara</button>
+    </div>
+
+    <div class="alert alert-info text-center" id="outputText">
+      Categoria Predicha: <strong>Ninguno</strong>
+    </div>
+
+    <h2 class="mt-5">Aprende Lenguaje de Señas</h2>
+
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Signo:</h5>
+            <video src="videos/hello.mp4" class="w-100" controls></video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-primary text-white text-center py-3 mt-5">
+   &copy; 2025 Seminario de Investiafaccion II - UNIVERSIDAD DE LIMA
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const video = document.getElementById("camera");
+      const outputText = document.getElementById("outputText");
+
+      try {
+        const constraints = {
+          audio: false,
+          video: {
+            facingMode: "user",
+            width: { ideal: 640 },
+            height: { ideal: 480 }
+          }
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+        await video.play();
+
+        setInterval(() => {
+          outputText.innerHTML = "Signo Predicho: <strong>Hello</strong>";
+        }, 5000);
+
+      } catch (error) {
+        console.error("❌ Error al acceder a la cámara:", error);
+        outputText.classList.remove("alert-info");
+        outputText.classList.add("alert-danger");
+        outputText.innerHTML = `
+          <strong>Error:</strong> No se pudo acceder a la cámara.<br>
+          Verifica los permisos del navegador o usa localhost.<br>
+          <code>${error.message}</code>
+        `;
+      }
+    });
+  </script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
